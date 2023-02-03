@@ -108,19 +108,34 @@ values
 ('004', '004', '005', '001','8609-KTT', 2000, '12311112456754345346TRD', '2019-12-15');
 
 
+create table if not exists practica.moneda(
+	id varchar(10) not null,
+	tipo varchar(50) not null,
+	constraint moneda_PK primary key(id)
+);
+
+insert into practica.moneda(id,tipo) values
+('001', 'Euro'),
+('002', 'Dolares');
+
+
 create table if not exists practica.revision(
 	id varchar(10) not null,
+	idMoneda varchar(10) not null,
 	kilometros int not null,
 	fecha date not null,
 	importe varchar(50) not null,
 	constraint revision_PK primary key(id)
 );
 
-insert into practica.revision(id,kilometros,fecha,importe) values
-('001', 180000, '2019-06-01', '150€'),
-('002', 40000, '2019-06-01', '150€'),
-('003', 10000, '2019-06-01', '150€'),
-('004', 7000, '2019-06-01', '150€');
+alter table  practica.revision add constraint revision_moneda_FK foreign key(idMoneda) references
+practica.moneda(id) on delete cascade;
+
+insert into practica.revision(id,idMoneda,kilometros,fecha,importe) values
+('001','001', 180000, '2019-06-01', '150'),
+('002','001', 40000, '2019-06-01', '150'),
+('003','002', 10000, '2019-06-01', '150'),
+('004','002', 7000, '2019-06-01', '150');
 
 create table if not exists practica.coche_has_revision(
 	idCoche varchar(10) not null,
